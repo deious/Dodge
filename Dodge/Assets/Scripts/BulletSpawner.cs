@@ -5,8 +5,8 @@ using UnityEngine;
 public class BulletSpawner : MonoBehaviour
 {
     public GameObject bulletPrefab;
-    public float spawnRateMin = 0.5f;
-    public float spawnRateMax = 3f;
+    float spawnRateMin = 0.3f;
+    float spawnRateMax = 3f;
 
     Transform target;
     float spawnRate;
