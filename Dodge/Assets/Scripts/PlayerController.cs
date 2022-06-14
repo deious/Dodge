@@ -6,7 +6,8 @@ public class PlayerController : MonoBehaviour
 {
     private Rigidbody playerRigidbody;
     public float speed = 8f;
-
+    public Animator ani;
+    public AnimatorControllerParameter anc;
     void Start()
     {
         playerRigidbody = GetComponent<Rigidbody>();
@@ -22,6 +23,11 @@ public class PlayerController : MonoBehaviour
 
         Vector3 newVelocity = new Vector3(xSpeed, 0f, zSpeed);
         playerRigidbody.velocity = newVelocity;
+
+        if (xSpeed == 0 && zSpeed == 0)
+            ani.SetBool("RunCheck", false);
+        else
+            ani.SetBool("RunCheck", true);
     }
 
     public void Die()
