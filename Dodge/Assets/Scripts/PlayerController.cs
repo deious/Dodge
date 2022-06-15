@@ -10,8 +10,9 @@ public class PlayerController : MonoBehaviour
     private Color color;
     public float speed = 8f;
     public Animator ani;
-    public AnimatorControllerParameter anc;
     public Image img;
+    public float coolTime;
+    public float holdingTime;
 
     void Start()
     {
@@ -31,6 +32,7 @@ public class PlayerController : MonoBehaviour
 
         Vector3 newVelocity = new Vector3(xSpeed, 0f, zSpeed);
         playerRigidbody.velocity = newVelocity;
+        transform.LookAt(transform.position + newVelocity);
 
         if (xSpeed == 0 && zSpeed == 0)
             ani.SetBool("RunCheck", false);
@@ -55,14 +57,15 @@ public class PlayerController : MonoBehaviour
     {
         SteamPackCheck = true;
         speed += 5;
-        StartCoroutine("CoolTime");
+        StartCoroutine(CoolTime(coolTime));
+        StartCoroutine(HoldingTime(holdingTime));
     }
 
-    IEnumerator CoolTime()
+    IEnumerator CoolTime(float coolTime)
     {
         color.a = 0.3f;
         img.color = color;
-        float timeCheck = 1f;
+        float timeCheck = coolTime;
         img.fillAmount = 1;
         float temp = img.fillAmount / timeCheck;
         while(timeCheck > 0)
@@ -73,30 +76,15 @@ public class PlayerController : MonoBehaviour
         }
 
         SteamPackCheck = false;
-        speed -= 5;
     }
 
-    /*IEnumerator CoolTime(int selected)
+    IEnumerator HoldingTime(float holdingTime)
     {
-        DungeonManager.Instance.characterLists[selected].totalSkillCheck = false;
-        DungeonManager.Instance.shieldCheck = false;
-        float timeCheck = 1f;
-        characterPrefabs[selected].GetComponent<Animator>().SetTrigger("Shield_t");
-        characterPrefabs[selected].transform.Find("Shield").gameObject.SetActive(true);
-        shieldCoolTime.transform.GetComponent<Image>().fillAmount = 1;
-        float temp = shieldCoolTime.transform.GetComponent<Image>().fillAmount / timeCheck;
-        shieldCoolTime.SetActive(true);
-        StartCoroutine(ShieldOff(timeCheck, selected));
-        while (timeCheck > 0)
+        while(holdingTime > 0)
         {
-            shieldCoolTime.transform.GetComponent<Image>().fillAmount -= temp * 0.1f;
-            timeCheck -= 0.1f;
+            holdingTime -= 0.1f;
             yield return new WaitForSeconds(0.1f);
         }
-        characterPrefabs[selected].GetComponent<Animator>().SetBool("ShieldCheck", false);
-        shieldCoolTime.SetActive(false);
-
-        characterPrefabs[selected].GetComponent<Animator>().SetBool("ShieldCheck", true);
-        DungeonManager.Instance.shieldCheck = true;
-    }*/
+        speed -= 5;
+    }
 }

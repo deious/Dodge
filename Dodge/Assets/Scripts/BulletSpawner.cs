@@ -4,7 +4,6 @@ using UnityEngine;
 
 public class BulletSpawner : MonoBehaviour
 {
-    public GameObject bulletPrefab;
     float spawnRateMin = 0.3f;
     float spawnRateMax = 3f;
 
@@ -26,8 +25,13 @@ public class BulletSpawner : MonoBehaviour
         if(timeAfterSpawn >= spawnRate)
         {
             timeAfterSpawn = 0f;
-
-            GameObject bullet = Instantiate(bulletPrefab, transform.position, transform.rotation);
+            GameObject bullet = BulletPool.Instance.GetObject();
+            //bullet.transform.position = new Vector3(transform.position.x, transform.position.y, transform.position.z);
+            bullet.transform.position = transform.position;
+            bullet.transform.rotation = transform.rotation;
+            //target = FindObjectOfType<PlayerController>().transform;
+            //GameObject bullet = Instantiate(bulletPrefab, transform.position, transform.rotation);
+            bullet.SetActive(true);
             bullet.transform.LookAt(target);
             spawnRate = Random.Range(spawnRateMin, spawnRateMax);
         }

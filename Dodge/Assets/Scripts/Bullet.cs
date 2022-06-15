@@ -10,10 +10,12 @@ public class Bullet : MonoBehaviour
 
     void Start()
     {
+        //StartCoroutine(ReCall(gameObject, 0.5f));
         bulletRigidbody = GetComponent<Rigidbody>();
         bulletRigidbody.velocity = transform.forward * Random.Range(minSpeed,maxSpeed);
+        StartCoroutine(ReCall(gameObject, 3.0f));
 
-        Destroy(gameObject, 3f);
+        //Destroy(gameObject, 3f);
     }
 
     void OnTriggerEnter(Collider other)
@@ -27,5 +29,11 @@ public class Bullet : MonoBehaviour
                 playerController.Die();
             }
         }
+    }
+
+    IEnumerator ReCall(GameObject gameObject, float time)
+    {
+        yield return new WaitForSeconds(time);
+        BulletPool.Instance.ReturnObject(gameObject);
     }
 }
