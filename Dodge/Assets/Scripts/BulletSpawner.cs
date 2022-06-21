@@ -21,8 +21,8 @@ public class BulletSpawner : MonoBehaviour
     void Update()
     {
         timeAfterSpawn += Time.deltaTime;
-        
-        if(timeAfterSpawn >= spawnRate)
+
+        if (timeAfterSpawn >= spawnRate)
         {
             timeAfterSpawn = 0f;
             GameObject bullet = BulletPool.Instance.GetObject();
@@ -32,8 +32,16 @@ public class BulletSpawner : MonoBehaviour
             //target = FindObjectOfType<PlayerController>().transform;
             //GameObject bullet = Instantiate(bulletPrefab, transform.position, transform.rotation);
             bullet.SetActive(true);
+            target = FindObjectOfType<PlayerController>().transform;
             bullet.transform.LookAt(target);
+            StartCoroutine(ReCall(bullet, 3.0f));
             spawnRate = Random.Range(spawnRateMin, spawnRateMax);
         }
+    }
+
+    IEnumerator ReCall(GameObject gameObject, float time)
+    {
+        yield return new WaitForSeconds(time);
+        BulletPool.Instance.ReturnObject(gameObject);
     }
 }
